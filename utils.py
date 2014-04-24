@@ -49,7 +49,8 @@ def wsd(context_sentence, word, option="adapted"):
 
 def exaggerated_edit_distance(word, word2):
     dist = (distance(word, word2)+1)
-    return 1 / (math.e ** dist)
+    # return 1 / (math.e ** dist)
+    return 1 / dist
 
 
 def relative_matrix(senses_1, tokens_1, senses_2, tokens_2, sim_option="path"):
@@ -61,17 +62,20 @@ def relative_matrix(senses_1, tokens_1, senses_2, tokens_2, sim_option="path"):
     for sense in senses_1:
         row = []
         for sense2 in senses_2:
-            if sense and sense2:
-                sim_score = similarity(sense, sense2, sim_option)
-                val = sim_score
-                if not sim_score:
-                    val = exaggerated_edit_distance(tokens_1[row_count], tokens_2[col_count])
-            else:
-                edit_dist = exaggerated_edit_distance(tokens_1[row_count], tokens_2[col_count])
+            edit_dist = exaggerated_edit_distance(tokens_1[row_count], tokens_2[col_count])
+
+            sim_score = similarity(sense, sense2, sim_option) or 0
+
+            val = sim_score
+
+            if edit_dist > sim_score:
                 val = edit_dist
-            print tokens_1[row_count], tokens_2[col_count], val
+
+            print tokens_1[row_count], tokens_2[col_count], val, sim_score, edit_dist
+
             row.append(val)
             col_count += 1
+
         row_count += 1
         col_count = 0
         relative_matrix.append(row)
