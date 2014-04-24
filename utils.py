@@ -93,4 +93,7 @@ def maximum_weight_bipartite(matrix):
 
 
 def similarity(sense1, sense2, option="path"):
-    return sim(sense1, sense2, option)
+    if sense1 and sense2:
+        return sim(sense1, sense2, option)
+
+    return None

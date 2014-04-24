@@ -18,13 +18,17 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def similarity(sentence1, sentence2, **kwargs):
+    print kwargs
+
     stemmer = kwargs.get('stemmer', 'porter')
 
     wsd = kwargs.get('wsd', 'adapted')
 
-    sim = kwargs.get('sim', 'path')
+    sim = kwargs.get('similarity', 'path')
 
     scoring = kwargs.get('scoring', 'min')
+
+    print stemmer, wsd, sim, scoring
 
     tokens_1 = utils.tokenize(sentence1, stemmer)
     tokens_2 = utils.tokenize(sentence2, stemmer)
@@ -48,11 +52,11 @@ def similarity(sentence1, sentence2, **kwargs):
         candidate['match'] = val
         candidate['word1'] = {
             'token': tokens_1[row],
-            'definition': senses_1[row].definition or None,
+            'definition': senses_1[row].definition if hasattr(senses_1[row], 'definition') else None,
         }
         candidate['word2'] = {
             'token': tokens_2[col],
-            'definition': senses_2[col].definition or None,
+            'definition': senses_2[col].definition if hasattr(senses_2[col], 'definition') else None,
         }
 
         candidates.append(candidate)
@@ -60,7 +64,7 @@ def similarity(sentence1, sentence2, **kwargs):
     score = min(vals)
 
     if scoring == 'mean':
-        score = sum(vals)/len(tokens_1)+len(tokens_2)
+        score = 2*sum(vals)/(len(tokens_1)+len(tokens_2))
 
     result = {
         'score': score,

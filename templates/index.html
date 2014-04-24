@@ -41,7 +41,17 @@
                     <h4>Marking Parameters</h4>
                 </div>
                 <div class="panel-body">
+                    <label>Stemmer</label>
+                    <select id="stemmer" ng-model="stemmer" ng-options="opt as opt.label for opt in stemmers">
+                    </select>
 
+                    <label>Similarity</label>
+                    <select id="similarity" ng-model="similarity" ng-options="opt as opt.label for opt in similarities">
+                    </select>
+
+                    <label>Scoring</label>
+                    <select id="scoring" ng-model="scoring" ng-options="opt as opt.label for opt in scorers">
+                    </select>
                 </div>
             </div>
         </div>
