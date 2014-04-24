@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Question {{ question.id }} by {{ question.owner }}{% endblock %}
+
+{% block body %}
+<h1>Question {{ question.id }}</h1>
+<p>By question.owner</p>
+<p>{{ question.text }}</p>
+{% if question.owner == user %}
+<hr>
+<h2>Marking Scheme</h2>
+<ul>
+    {% for answer in question.markinganswer_set.all %}
+    <li>{{ answer.text }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<hr>
+<h2>Answers</h2>
+{% if question.owner == user %}
+<a href="{% url 'questions.mark' question.id %}">Mark</a>
+{% endif %}
+<ul>
+    {% for answer in question.studentanswer_set.all %}
+    <li>{{ answer.student}}: {{ answer.text }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

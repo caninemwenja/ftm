@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Marking Results{% endblock %}
+
+{% block body %}
+<h2>Marking Results</h2>
+<p>{{ question.text }}</p>
+<hr>
+<ul>
+    {% for result in results %}
+        <li>
+            <div>
+                <p>{{ result.answer.text }}</p>
+                <p>{{ result.marking_answer.text }}</p>
+                <p>{{ result.result.score }}</p>
+                <ul>
+                    {% for candidate in result.result.candidates %}
+                        <li>
+                            {{ candidate.word1.token }} ({{ candidate.word1.definition }})
+                            vs
+                            {{ candidate.word2.token }} ({{ candidate.word2.definition }})
+                            - {{ candidate.match }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

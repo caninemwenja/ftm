@@ -61,7 +61,7 @@ def relative_matrix(senses_1, tokens_1, senses_2, tokens_2, sim_option="path"):
         for sense2 in senses_2:
             edit_dist = exaggerated_edit_distance(tokens_1[row_count], tokens_2[col_count])
 
-            sim_score = similarity(sense, sense2, sim_option) or 0
+            sim_score = sense_similarity(sense, sense2, sim_option) or 0
 
             val = sim_score
 
@@ -89,8 +89,72 @@ def maximum_weight_bipartite(matrix):
     return indices
 
 
-def similarity(sense1, sense2, option="path"):
+def sense_similarity(sense1, sense2, option="path"):
     if sense1 and sense2:
         return sim(sense1, sense2, option)
 
     return None
+
+
+def similarity(sentence1, sentence2, **kwargs):
+    print kwargs
+
+    stemmer = kwargs.get('stemmer', 'porter')
+
+    wsd_ = kwargs.get('wsd', 'adapted')
+
+    sim = kwargs.get('similarity', 'path')
+
+    scoring = kwargs.get('scoring', 'min')
+
+    context = kwargs.get('context', '')
+
+    print stemmer, wsd, sim, scoring
+
+    tokens_1 = tokenize(sentence1, stemmer)
+    tokens_2 = tokenize(sentence2, stemmer)
+
+    senses_1 = [wsd(sentence1+" "+context, token, wsd_) for token in tokens_1 if token and len(token) > 0]
+    senses_2 = [wsd(sentence2+" "+context, token, wsd_) for token in tokens_2 if token and len(token) > 0]
+
+    rel_mat = relative_matrix(senses_1, tokens_1, senses_2, tokens_2, sim)
+
+    indices = maximum_weight_bipartite(rel_mat)
+
+    candidates = []
+
+    vals = []
+    for row, col in indices:
+        candidate = {}
+
+        val = rel_mat[row][col]
+        vals.append(val)
+
+        candidate['match'] = val
+        candidate['word1'] = {
+            'token': tokens_1[row],
+            'definition': senses_1[row].definition if hasattr(senses_1[row], 'definition') else None,
+        }
+        candidate['word2'] = {
+            'token': tokens_2[col],
+            'definition': senses_2[col].definition if hasattr(senses_2[col], 'definition') else None,
+        }
+
+        candidates.append(candidate)
+
+    score = min(vals)
+
+    if scoring == 'mean':
+        score = 2*sum(vals)/(len(tokens_1)+len(tokens_2))
+
+    result = {
+        'score': score,
+        'candidates': candidates,
+        'tokens_1': tokens_1,
+        'tokens_2': tokens_2,
+        'senses_1': senses_1,
+        'senses_2': senses_2,
+        'rel_mat': rel_mat,
+    }
+
+    return result

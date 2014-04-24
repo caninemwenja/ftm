@@ -17,68 +17,6 @@ logging.getLogger().setLevel(logging.DEBUG)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def similarity(sentence1, sentence2, **kwargs):
-    print kwargs
-
-    stemmer = kwargs.get('stemmer', 'porter')
-
-    wsd = kwargs.get('wsd', 'adapted')
-
-    sim = kwargs.get('similarity', 'path')
-
-    scoring = kwargs.get('scoring', 'min')
-
-    print stemmer, wsd, sim, scoring
-
-    tokens_1 = utils.tokenize(sentence1, stemmer)
-    tokens_2 = utils.tokenize(sentence2, stemmer)
-
-    senses_1 = [utils.wsd(sentence1, token, wsd) for token in tokens_1 if token and len(token) > 0]
-    senses_2 = [utils.wsd(sentence2, token, wsd) for token in tokens_2 if token and len(token) > 0]
-
-    rel_mat = utils.relative_matrix(senses_1, tokens_1, senses_2, tokens_2, sim)
-
-    indices = utils.maximum_weight_bipartite(rel_mat)
-
-    candidates = []
-
-    vals = []
-    for row, col in indices:
-        candidate = {}
-
-        val = rel_mat[row][col]
-        vals.append(val)
-
-        candidate['match'] = val
-        candidate['word1'] = {
-            'token': tokens_1[row],
-            'definition': senses_1[row].definition if hasattr(senses_1[row], 'definition') else None,
-        }
-        candidate['word2'] = {
-            'token': tokens_2[col],
-            'definition': senses_2[col].definition if hasattr(senses_2[col], 'definition') else None,
-        }
-
-        candidates.append(candidate)
-
-    score = min(vals)
-
-    if scoring == 'mean':
-        score = 2*sum(vals)/(len(tokens_1)+len(tokens_2))
-
-    result = {
-        'score': score,
-        'candidates': candidates,
-        'tokens_1': tokens_1,
-        'tokens_2': tokens_2,
-        'senses_1': senses_1,
-        'senses_2': senses_2,
-        'rel_mat': rel_mat,
-    }
-
-    return result
-
-
 class IndexHandler(tornado.web.RequestHandler):
 
     def jinja_render(self, template_name, **kwargs):
@@ -114,7 +52,7 @@ class MarkerServer(sockjs.tornado.SockJSConnection):
         teacher = data['teacher']
         student = data['student']
 
-        result = similarity(teacher, student, **data)
+        result = utils.similarity(teacher, student, **data)
 
         self.send(json.dumps(result, default=lambda x: str(x)))
 

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Mark this Question{% endblock %}
+
+{% block body %}
+<h2>Mark this Question</h2>
+<p>{{ question.text }}</p>
+<hr>
+<form action="." method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Mark</button>
+</form>
+{% endblock %}

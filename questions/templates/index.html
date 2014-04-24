@@ -28,10 +28,12 @@
                         <a href="{% url 'questions.publish' question.id %}">Publish</a>
                     {% endif %}
                     <a href="{% url 'questions.scheme' question.id %}">Marking Scheme</a>
+                    <a href="{% url 'questions.mark' question.id %}">Mark</a>
                 {% endif %}
                 {% if question.published %}
-                    <a href="">Answer</a>
+                    <a href="{% url 'questions.answer' question.id %}">Answer</a>
                 {% endif %}
+                <a href="{% url 'questions.view' question.id %}">View Answers</a>
             </td>
         </tr>
         {% endfor %}
