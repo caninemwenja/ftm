@@ -1,0 +1,13 @@
+Jinja2==2.7.2
+MarkupSafe==0.18
+PyYAML==3.10
+argparse==1.2.1
+backports.ssl-match-hostname==3.4.0.2
+distribute==0.6.34
+munkres==1.0.6
+nltk==2.0.4
+nose==1.3.0
+python-Levenshtein==0.11.2
+sockjs-tornado==1.0.0
+tornado==3.2
+wsgiref==0.1.2
