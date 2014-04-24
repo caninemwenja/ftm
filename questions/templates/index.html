@@ -22,6 +22,8 @@
             <td>{{ question.text }}</td>
             <td>
                 {% if user == question.owner %}
+                    <a href="{% url 'questions.edit' question.id %}">Edit</a>
+                    <a href="{% url 'questions.remove' question.id %}" onclick="confirm('Are you sure you want to remove this question?')">Remove</a>
                     {% if not question.published %}
                         <a href="{% url 'questions.publish' question.id %}">Publish</a>
                     {% endif %}

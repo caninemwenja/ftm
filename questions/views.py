@@ -27,6 +27,34 @@ def add_question(request):
 
 
 @login_required
+def edit_question(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+
+    if question.owner != request.user:
+        return HttpResponseForbidden("You're not allowed to change that question's marking scheme")
+
+    form = QuestionForm(request.POST or None, instance=question)
+
+    if form.is_valid():
+        form.save()
+        return redirect(reverse('home'))
+
+    return render(request, "edit_question.html", {'form': form})
+
+
+@login_required
+def remove_question(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+
+    if question.owner != request.user:
+        return HttpResponseForbidden("You're not allowed to change that question's marking scheme")
+
+    question.delete()
+
+    return redirect(reverse('home'))
+
+
+@login_required
 def publish_question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     if question.owner == request.user:
@@ -46,6 +74,7 @@ def marking_scheme(request, question_id):
 
     marking_answers = question.markinganswer_set.all()
     return render(request, "scheme.html", {'answers': marking_answers, 'question': question})
+
 
 @login_required
 def add_marking_answer(request, question_id):
@@ -81,3 +110,17 @@ def edit_marking_answer(request, answer_id):
         return redirect(reverse("questions.scheme", args=(form.instance.question.id,)))
 
     return render(request, "edit_scheme.html", {'form': form})
+
+
+@login_required
+def remove_marking_answer(request, answer_id):
+    answer = get_object_or_404(MarkingAnswer, pk=answer_id)
+
+    if answer.question.owner != request.user:
+        return HttpResponseForbidden("You're not allowed to change that question's marking scheme")
+
+    question = answer.question
+
+    answer.delete()
+
+    return redirect(reverse("questions.scheme", args=(question.id,)))

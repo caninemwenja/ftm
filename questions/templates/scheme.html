@@ -9,7 +9,7 @@
 <h3>Answers</h3>
 <ul>
     {% for answer in answers %}
-        <li>{{ answer.text }} - <a href="{% url 'scheme.edit' answer.id %}">Edit</a></li>
+        <li>{{ answer.text }} - <a href="{% url 'scheme.edit' answer.id %}">Edit</a> <a href="{% url 'scheme.remove' answer.id %}">Remove</a></li>
     {% endfor %}
 </ul>
 
