@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registration',
+    'questions',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,7 +60,7 @@ WSGI_APPLICATION = 'marker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'ftm.db'),
     }
 }
 
@@ -80,3 +82,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = (
+    '',
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+LOGIN_URL = '/account/login'
+LOGIN_REDIRECT_URL = '/'
