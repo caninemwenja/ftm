@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="FTM">
+<head>
+    <title>Hello World</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+    <script src="/static/js/sockjs-0.3.min.js"></script>
+    <script src="/static/js/jquery-1.8.3.min.js"></script>
+    <script src="/static/js/angular.min.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+<body ng-controller="DemoController">
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <a href="#" class="navbar-brand">Free Text Marker: Demo</a>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <input class="col-md-12 input-lg" type="text" id="question" placeholder="Question" ng-model="question">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <input class="col-md-12 input-lg" type="text" id="teacher" placeholder="Teacher's answer" ng-model="teacher">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <input class="col-md-12 input-lg" type="text" id="student" placeholder="Student's answer" ng-model="student">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Marking Parameters</h4>
+                </div>
+                <div class="panel-body">
+                    <label>Stemmer</label>
+                    <select id="stemmer" ng-model="stemmer" ng-options="opt as opt.label for opt in stemmers">
+                    </select>
+
+                    <label>WSD</label>
+                    <select id="disambiguator" ng-model="disambiguator" ng-options="opt as opt.label for opt in disambiguators">
+                    </select>
+
+                    <label>Similarity</label>
+                    <select id="similarity" ng-model="similarity" ng-options="opt as opt.label for opt in similarities">
+                    </select>
+
+                    <label>Scoring</label>
+                    <select id="scoring" ng-model="scoring" ng-options="opt as opt.label for opt in scorers">
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-lg btn-default" ng-click="sendMsg()">Mark</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Results</h4>
+                </div>
+                <div class="panel-body">
+                    {% raw %}
+                    <p><strong>Score: </strong> <span class="text-danger">{{ result.score }}</span></p>
+                    <p>
+                        <strong>Candidates: </strong>
+                    <ul ng-repeat="candidate in result.candidates">
+                        <li><span class="text-danger">{{ candidate.match }}</span>: {{ candidate.word1.token }} <span class="text-muted" ng-show="candidate.word1.definition">({{ candidate.word1.definition}})</span> vs {{ candidate.word2.token }} <span class="text-muted" ng-show="candidate.word1.definition">({{ candidate.word1.definition}})</span></li>
+                    </ul>
+                    </p>
+                    <p>
+                        <strong>Matching: </strong>
+                    <ul ng-repeat="row in result.rel_mat track by $index">
+                        <li ng-repeat="col in row track by $index">
+                            <p>{{ result.tokens_1[$parent.$index] }}, {{ result.tokens_2[$index] }}, {{ col }}</p>
+                        </li>
+                    </ul>
+                    </p>
+                    {% endraw %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
