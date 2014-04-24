@@ -3,5 +3,38 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<h1>Niaje World</h1>
+<h2>Your Questions</h2>
+<hr>
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Question</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in questions %}
+        <tr>
+            <td>{{ question.id }}</td>
+            <td>{{ question.owner }}</td>
+            <td>{{ question.text }}</td>
+            <td>
+                {% if user == question.owner %}
+                    {% if not question.published %}
+                        <a href="{% url 'questions.publish' question.id %}">Publish</a>
+                    {% endif %}
+                    <a href="{% url 'questions.scheme' question.id %}">Marking Scheme</a>
+                {% endif %}
+                {% if question.published %}
+                    <a href="">Answer</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'questions.add' %}">Add Question</a>
 {% endblock %}

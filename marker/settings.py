@@ -61,7 +61,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'ftm.db'),
-    }
+        }
 }
 
 # Internationalization
@@ -90,3 +90,11 @@ TEMPLATE_DIRS = (
 
 LOGIN_URL = '/account/login'
 LOGIN_REDIRECT_URL = '/'
+
+TEMPLATE_PROCESSORS = (
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+    "django.contrib.auth.context_processors.auth",
+)

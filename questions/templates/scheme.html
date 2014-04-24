@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<h2>Marking Scheme</h2>
+<p><strong>Question:</strong> {{question.text}}</p>
+<hr>
+<h3>Answers</h3>
+<ul>
+    {% for answer in answers %}
+        <li>{{ answer.text }} - <a href="{% url 'scheme.edit' answer.id %}">Edit</a></li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'scheme.add' question.id %}">Add Answer</a>
+{% endblock %}
