@@ -6,8 +6,7 @@
 <h2>Edit Marking Answer</h2>
 <hr>
 <form action="." method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Edit</button>
+    {% include 'form-snippet.html' %}
+    <button type="submit" class="btn btn-primary">Edit</button>
 </form>
 {% endblock %}

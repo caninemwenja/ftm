@@ -50,7 +50,15 @@ class MarkingForm(forms.Form):
         ('mean', 'Mean')
     )
 
+    thresholds = (
+        ('min', 'Minimum'),
+        ('mean', 'Mean'),
+        ('max', 'Maximum')
+    )
+
     stemmer = forms.ChoiceField(choices=stemmers, required=True)
     wsd = forms.ChoiceField(choices=wsds, required=True)
     sim = forms.ChoiceField(choices=sims, required=True)
     scorer = forms.ChoiceField(choices=scorers, required=True)
+    tentative_threshold = forms.ChoiceField(choices=thresholds, required=True)
+    threshold = forms.FloatField(required=False)

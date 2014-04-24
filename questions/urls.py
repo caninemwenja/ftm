@@ -16,4 +16,5 @@ urlpatterns = patterns(
     url(r'^scheme/remove/(\d+)/$', 'questions.views.remove_marking_answer', name='scheme.remove'),
     url(r'^questions/answer/(\d+)/$', 'questions.views.answer_question', name='questions.answer'),
     url(r'^questions/mar/(\d+)/$', 'questions.views.mark_question', name='questions.mark'),
+    url(r'^test_data/$', 'questions.views.test_data', name='test_data'),
 )

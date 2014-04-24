@@ -3,11 +3,9 @@
 {% block title %}Add Marking Answer{% endblock %}
 
 {% block body %}
-<h2>Add Marking Answer</h2>
-<hr>
+<h2 class="page-header">Add Marking Answer</h2>
 <form action="." method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add</button>
+    {% include 'form-snippet.html' %}
+    <button type="submit" class="btn btn-primary">Add</button>
 </form>
 {% endblock %}

@@ -3,42 +3,45 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<h2>Your Questions</h2>
-<hr>
-<table>
+<h1 class="page-header">Questions</h1>
+<table class="table table-bordered">
     <thead>
-        <tr>
-            <th>#</th>
-            <th>User</th>
-            <th>Question</th>
-            <th>Options</th>
-        </tr>
+    <tr>
+        <th>#</th>
+        <th>User</th>
+        <th>Question</th>
+        <th>Options</th>
+    </tr>
     </thead>
     <tbody>
-        {% for question in questions %}
-        <tr>
-            <td>{{ question.id }}</td>
-            <td>{{ question.owner }}</td>
-            <td>{{ question.text }}</td>
-            <td>
-                {% if user == question.owner %}
-                    <a href="{% url 'questions.edit' question.id %}">Edit</a>
-                    <a href="{% url 'questions.remove' question.id %}" onclick="confirm('Are you sure you want to remove this question?')">Remove</a>
-                    {% if not question.published %}
-                        <a href="{% url 'questions.publish' question.id %}">Publish</a>
-                    {% endif %}
-                    <a href="{% url 'questions.scheme' question.id %}">Marking Scheme</a>
-                    <a href="{% url 'questions.mark' question.id %}">Mark</a>
-                {% endif %}
-                {% if question.published %}
-                    <a href="{% url 'questions.answer' question.id %}">Answer</a>
-                {% endif %}
-                <a href="{% url 'questions.view' question.id %}">View Answers</a>
-            </td>
-        </tr>
-        {% endfor %}
+    {% for question in questions %}
+    <tr>
+        <td>{{ question.id }}</td>
+        <td>{{ question.owner }}</td>
+        <td>{{ question.text }}</td>
+        <td>
+            {% if user == question.owner %}
+            <a href="{% url 'questions.edit' question.id %}" class="btn btn-sm btn-primary">Edit</a>
+            <a href="{% url 'questions.remove' question.id %}" class="btn btn-sm btn-danger" onclick="confirm('Are you sure you want to remove this question?')">Remove</a>
+            {% if not question.published %}
+            <a href="{% url 'questions.publish' question.id %}" class="btn btn-sm btn-warning">Publish</a>
+            {% else %}
+            <a href="{% url 'questions.scheme' question.id %}" class="btn btn-sm btn-primary">Marking Scheme</a>
+            <a href="{% url 'questions.mark' question.id %}" class="btn btn-sm btn-success">Mark</a>
+            {% endif %}
+            {% endif %}
+            {% if question.published %}
+            <a href="{% url 'questions.answer' question.id %}" class="btn btn-sm btn-warning">Answer</a>
+            <a href="{% url 'questions.view' question.id %}" class="btn btn-sm btn-primary">View Answers</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
     </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="4"><a href="{% url 'questions.add' %}" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> add question</a></td>
+    </tr>
+    </tfoot>
 </table>
-
-<a href="{% url 'questions.add' %}">Add Question</a>
 {% endblock %}

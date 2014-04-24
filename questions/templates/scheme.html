@@ -4,14 +4,33 @@
 
 {% block body %}
 <h2>Marking Scheme</h2>
-<p><strong>Question:</strong> {{question.text}}</p>
+<p class="lead text-muted"><strong>Question:</strong> {{question.text}}</p>
 <hr>
 <h3>Answers</h3>
-<ul>
-    {% for answer in answers %}
-        <li>{{ answer.text }} - <a href="{% url 'scheme.edit' answer.id %}">Edit</a> <a href="{% url 'scheme.remove' answer.id %}">Remove</a></li>
+        <table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Answer</th>
+        <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for answer in question.markinganswer_set.all %}
+    <tr>
+        <td>{{ answer.id }}</td>
+        <td>{{ answer.text }}</td>
+        <td>
+            <a href="{% url 'scheme.edit' answer.id %}" class="btn btn-sm btn-primary">Edit</a>
+            <a href="{% url 'scheme.remove' answer.id %}" class="btn btn-sm btn-danger">Remove</a>
+        </td>
+    </tr>
     {% endfor %}
-</ul>
-
-<a href="{% url 'scheme.add' question.id %}">Add Answer</a>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3"><a href="{% url 'scheme.add' question.id %}" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Add Answer</a></td>
+        </tr>
+    </tfoot>
+</table>
 {% endblock %}

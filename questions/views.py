@@ -1,3 +1,5 @@
+from __future__ import division
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http.response import HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -168,28 +170,86 @@ def mark_question(request, question_id):
         wsd = form.cleaned_data['wsd']
         sim = form.cleaned_data['sim']
         scorer = form.cleaned_data['scorer']
+        tentative_threshold_opt = form.cleaned_data['tentative_threshold']
+
+        print form.cleaned_data
 
         results = []
 
         marking_answers = question.markinganswer_set.all()
 
+        tentative_threshold = 0
+
+        if tentative_threshold_opt == 'min':
+            tentative_threshold = 10000
+
+        thresholds = []
+
+        for answer in marking_answers:
+            result = result = utils.similarity(
+                answer.text, answer.text,
+                stemmer=stemmer, wsd=wsd, similarity=sim, scoring=scorer)
+
+            if tentative_threshold_opt == 'min':
+                if result['score'] < tentative_threshold:
+                    tentative_threshold = result['score']
+
+            if tentative_threshold_opt == 'mean':
+                thresholds.append(result['score'])
+
+            if tentative_threshold_opt == 'max':
+                if result['score'] > tentative_threshold:
+                    tentative_threshold = result['score']
+
+        if tentative_threshold_opt == 'mean':
+            tentative_threshold = sum(thresholds) / len(thresholds)
+
+
+        threshold = form.cleaned_data['threshold'] if 'threshold' in form.cleaned_data and form.cleaned_data['threshold'] else tentative_threshold
+
         for answer in question.studentanswer_set.all():
             max_result = None
-            max_score = 0
+            max_score = -1
             max_markinganswer = None
 
             for marking_answer in marking_answers:
                 context = question.text + " " + marking_answer.text
                 result = utils.similarity(
                     marking_answer.text, answer.text,
-                    stemmer=stemmer, wsd=wsd, similarity=sim, scorer=scorer, context=context)
+                    stemmer=stemmer, wsd=wsd, similarity=sim, scoring=scorer, context=context)
                 if result['score'] > max_score:
                     max_result = result
                     max_score = result['score']
                     max_markinganswer = marking_answer
 
-            results.append({'answer': answer, 'marking_answer': max_markinganswer, 'result': max_result})
+            sent_1_terms = [candidate['word1']['token'] for candidate in max_result['candidates']]
+            sent_2_terms = [candidate['word2']['token'] for candidate in max_result['candidates']]
 
-        return render(request, 'results.html', {'results': results, 'question': question})
+            results.append({'answer': answer, 'marking_answer': max_markinganswer, 'result': max_result, 'sent_1_terms': sent_1_terms, 'sent_2_terms': sent_2_terms})
+
+        return render(request, 'results.html', {'results': results, 'question': question, 'threshold': threshold})
 
     return render(request, 'mark.html', {'form': form, 'question': question})
+
+
+@login_required
+def test_data(request):
+    # one word
+    question, created = Question.objects.get_or_create(owner=request.user, text="What is the capital of France?")
+
+    question.markinganswer_set.get_or_create(text='Paris')
+
+    question.published = True
+    question.save()
+
+    # multiple words
+    question, created = Question.objects.get_or_create(owner=request.user, text="What is the function of Parliament?")
+
+    question.markinganswer_set.get_or_create(text='Parliament is a law making institution')
+    question.markinganswer_set.get_or_create(text='Parliament makes laws')
+    question.markinganswer_set.get_or_create(text='Parliament is a government body')
+
+    question.published = True
+    question.save()
+
+    return redirect(reverse('home'))

@@ -3,26 +3,58 @@
 {% block title %}Question {{ question.id }} by {{ question.owner }}{% endblock %}
 
 {% block body %}
-<h1>Question {{ question.id }}</h1>
-<p>By question.owner</p>
-<p>{{ question.text }}</p>
+<h1 class="page-header">Question {{ question.id }} <small>By {{ question.owner }}</small></h1>
+<p class="lead text-muted">{{ question.text }}</p>
 {% if question.owner == user %}
-<hr>
-<h2>Marking Scheme</h2>
-<ul>
+<h2 class="page-header">Marking Scheme</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Answer</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for answer in question.markinganswer_set.all %}
-    <li>{{ answer.text }}</li>
+    <tr>
+        <td>{{ answer.id }}</td>
+        <td>{{ answer.text }}</td>
+    </tr>
     {% endfor %}
-</ul>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2"><a href="{% url 'scheme.add' question.id %}" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Add Answer</a></td>
+        </tr>
+    </tfoot>
+</table>
 {% endif %}
-<hr>
-<h2>Answers</h2>
-{% if question.owner == user %}
-<a href="{% url 'questions.mark' question.id %}">Mark</a>
-{% endif %}
-<ul>
+<h2 class="page-header">Answers</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>User</th>
+        <th>Answer</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for answer in question.studentanswer_set.all %}
-    <li>{{ answer.student}}: {{ answer.text }}</li>
+    <tr>
+        <td>{{ answer.id }}</td>
+        <td>{{ answer.student }}</td>
+        <td>{{ answer.text }}</td>
+    </tr>
     {% endfor %}
-</ul>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3">
+            {% if question.owner == user %}
+            <a href="{% url 'questions.mark' question.id %}" class="btn btn-sm btn-success">Mark &raquo;</a>
+            {% endif %}
+        </td>
+    </tr>
+    </tfoot>
+</table>
 {% endblock %}

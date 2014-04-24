@@ -3,12 +3,10 @@
 {% block title %}Mark this Question{% endblock %}
 
 {% block body %}
-<h2>Mark this Question</h2>
-<p>{{ question.text }}</p>
-<hr>
+<h2 class="page-header">Mark this Question</h2>
+<p class="lead text-muted">{{ question.text }}</p>
 <form action="." method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Mark</button>
+    {% include 'form-snippet.html' %}
+    <button type="submit" class="btn btn-primary">Mark</button>
 </form>
 {% endblock %}

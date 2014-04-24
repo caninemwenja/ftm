@@ -4,11 +4,10 @@
 
 {% block body %}
 <h2>Answer this question</h2>
-<p>{{ question.text }}</p>
+<p class="lead text-muted">{{ question.text }}</p>
 <hr>
 <form action="." method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Answer</button>
+    {% include 'form-snippet.html' %}
+    <button type="submit" class="btn btn-primary">Answer</button>
 </form>
 {% endblock %}
