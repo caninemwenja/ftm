@@ -31,9 +31,18 @@ marker.controller('DemoController', function($scope){
         { value: 'mean', label: 'Mean'},
     ]
 
+    $scope.disambiguators = [
+        { value: 'adapted', label: 'Adapted Lesk'},
+        { value: 'simple', label: 'Simple Lesk'},
+        { value: 'cosine', label: 'Cosine Lesk'},
+        { value: 'original', label: 'Original Lesk'},
+        { value: 'wup', label: 'Wup Similarity'},
+    ]
+
     $scope.stemmer = $scope.stemmers[0];
     $scope.similarity = $scope.similarities[0];
     $scope.scoring = $scope.scorers[0];
+    $scope.disambiguator = $scope.disambiguators[0];
 
     sock.onopen = function(){
         console.log("Connection opened");
@@ -61,7 +70,8 @@ marker.controller('DemoController', function($scope){
             'student': $scope.student,
             'stemmer': $scope.stemmer.value,
             'similarity': $scope.similarity.value,
-            'scoring': $scope.scoring.value
+            'scoring': $scope.scoring.value,
+            'wsd': $scope.disambiguator.value
         }
 
         sock.send(JSON.stringify(data));

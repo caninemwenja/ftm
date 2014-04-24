@@ -45,6 +45,10 @@
                     <select id="stemmer" ng-model="stemmer" ng-options="opt as opt.label for opt in stemmers">
                     </select>
 
+                    <label>WSD</label>
+                    <select id="disambiguator" ng-model="disambiguator" ng-options="opt as opt.label for opt in disambiguators">
+                    </select>
+
                     <label>Similarity</label>
                     <select id="similarity" ng-model="similarity" ng-options="opt as opt.label for opt in similarities">
                     </select>
