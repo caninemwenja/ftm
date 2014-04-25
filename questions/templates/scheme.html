@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Marking Scheme{% endblock %}
 
 {% block body %}
 <h2>Marking Scheme</h2>
 <p class="lead text-muted"><strong>Question:</strong> {{question.text}}</p>
 <hr>
 <h3>Answers</h3>
-        <table class="table">
+<table class="table table-bordered">
     <thead>
     <tr>
         <th>#</th>
@@ -28,9 +28,9 @@
     {% endfor %}
     </tbody>
     <tfoot>
-        <tr>
-            <td colspan="3"><a href="{% url 'scheme.add' question.id %}" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Add Answer</a></td>
-        </tr>
+    <tr>
+        <td colspan="3"><a href="{% url 'scheme.add' question.id %}" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Add Answer</a></td>
+    </tr>
     </tfoot>
 </table>
 {% endblock %}
