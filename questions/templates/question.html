@@ -50,6 +50,9 @@
     <tfoot>
     <tr>
         <td colspan="3">
+            {% if question.published %}
+            <a href="{% url 'questions.answer' question.id %}" class="btn btn-sm btn-primary">Answer</a>
+            {% endif %}
             {% if question.owner == user %}
             <a href="{% url 'questions.mark' question.id %}" class="btn btn-sm btn-success">Mark &raquo;</a>
             {% endif %}

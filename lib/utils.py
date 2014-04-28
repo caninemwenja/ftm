@@ -10,9 +10,18 @@ from munkres import Munkres, make_cost_matrix
 from lesk import cosine_lesk, simple_lesk, adapted_lesk, original_lesk
 from lib.similarity import sim, max_similarity
 
+import string
+
+
+def remove_punctuation(sentence):
+    for symbol in string.punctuation:
+        sentence = sentence.replace(symbol, '')
+
+    return sentence
+
 
 def tokenize(sentence, stemmer='lancaster'):
-    tokens = sentence.split(" ")
+    tokens = remove_punctuation(sentence).lower().split(" ")
 
     tokenized = []
 
@@ -31,6 +40,8 @@ def tokenize(sentence, stemmer='lancaster'):
 
 
 def wsd(context_sentence, word, option="adapted"):
+    # clean context sentence
+    context_sentence = remove_punctuation(context_sentence)
     wsd_fn = adapted_lesk
     if option == "simple":
         wsd_fn = simple_lesk
