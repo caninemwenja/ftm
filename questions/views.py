@@ -174,7 +174,10 @@ def mark_question(request, question_id):
 
         threshold_opt = form.cleaned_data['threshold'] if 'threshold' in form.cleaned_data else None
 
-        results, threshold = question.mark(stemmer, wsd, sim, scorer, tentative_threshold_opt, threshold_opt)
+        results, threshold = question.mark(
+            stemmer=stemmer, wsd=wsd, similarity=sim,
+            scorer=scorer, tentative_threshold_opt=tentative_threshold_opt,
+            threshold_opt=threshold_opt)
 
         return render(request, 'results.html', {'results': results, 'question': question, 'threshold': threshold})
 

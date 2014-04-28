@@ -17,7 +17,14 @@ class Question(TimestampedModel):
     text = models.TextField()
     published = models.BooleanField(default=False)
 
-    def mark(self, stemmer, wsd, sim, scorer, tentative_threshold_opt, threshold_opt=None):
+    def mark(self, **kwargs):
+        stemmer = kwargs.get('stemmer', None)
+        wsd = kwargs.get('wsd', None)
+        sim = kwargs.get('similarity', None)
+        scorer = kwargs.get('scorer', None)
+        tentative_threshold_opt = kwargs.get('tentative_threshold_opt', None)
+        threshold_opt = kwargs.get('threshold_opt', None)
+
         results = []
 
         marking_answers = self.markinganswer_set.all()
@@ -46,7 +53,10 @@ class Question(TimestampedModel):
                     tentative_threshold = result['score']
 
         if tentative_threshold_opt == 'mean':
-            tentative_threshold = sum(thresholds) / len(thresholds)
+            try:
+                tentative_threshold = sum(thresholds) / len(thresholds)
+            except ZeroDivisionError:
+                tentative_threshold = 0
 
         threshold = threshold_opt if threshold_opt else tentative_threshold
 

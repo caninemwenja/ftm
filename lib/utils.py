@@ -7,7 +7,6 @@ from nltk.stem.lancaster import LancasterStemmer
 from nltk.stem.porter import PorterStemmer
 from munkres import Munkres, make_cost_matrix
 
-from pattern.text.en import wordnet
 from pattern.text.en import singularize
 from pattern.text.en import conjugate
 
@@ -99,7 +98,7 @@ def relative_matrix(senses_1, tokens_1, senses_2, tokens_2, sim_option="path"):
             if edit_dist > sim_score:
                 val = edit_dist
 
-            print tokens_1[row_count], tokens_2[col_count], val, sim_score, edit_dist
+            #print tokens_1[row_count], tokens_2[col_count], val, sim_score, edit_dist
 
             row.append(val)
             col_count += 1
@@ -128,7 +127,7 @@ def sense_similarity(sense1, sense2, option="path"):
 
 
 def similarity(sentence1, sentence2, **kwargs):
-    print kwargs
+    #print kwargs
 
     stemmer = kwargs.get('stemmer', 'porter')
 
