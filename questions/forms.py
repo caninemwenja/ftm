@@ -25,7 +25,8 @@ class StudentAnswerForm(forms.ModelForm):
 class MarkingForm(forms.Form):
     stemmers = (
         ('porter', 'Porter Stemmer'),
-        ('lancaster', 'Lancaster Stemmer')
+        ('lancaster', 'Lancaster Stemmer'),
+        ('pattern', 'Pattern Library Stemming')
     )
 
     wsds = (

@@ -7,10 +7,26 @@ from nltk.stem.lancaster import LancasterStemmer
 from nltk.stem.porter import PorterStemmer
 from munkres import Munkres, make_cost_matrix
 
+from pattern.text.en import wordnet
+from pattern.text.en import singularize
+from pattern.text.en import conjugate
+
 from lesk import cosine_lesk, simple_lesk, adapted_lesk, original_lesk
 from lib.similarity import sim, max_similarity
 
 import string
+
+
+class PatternStemmer(object):
+
+    def stem(self, word):
+        token = singularize(word)
+
+        conjugation = conjugate(token, 'inf')
+        if conjugation:
+            token = str(conjugation)
+
+        return token
 
 
 def remove_punctuation(sentence):
@@ -24,19 +40,23 @@ def tokenize(sentence, stemmer='lancaster'):
     tokens = remove_punctuation(sentence).lower().split(" ")
 
     tokenized = []
+    originals = []
 
     st = LancasterStemmer()
 
     if stemmer == "porter":
         st = PorterStemmer()
+    if stemmer == "pattern":
+        st = PatternStemmer()
 
     # remove stop words
     for token in tokens:
         if token not in stopwords.words('english'):
+            originals.append(token)
             token = st.stem(token)
             tokenized.append(token)
 
-    return tokenized
+    return tokenized, originals
 
 
 def wsd(context_sentence, word, option="adapted"):
@@ -120,10 +140,8 @@ def similarity(sentence1, sentence2, **kwargs):
 
     context = kwargs.get('context', '')
 
-    print stemmer, wsd, sim, scoring
-
-    tokens_1 = tokenize(sentence1, stemmer)
-    tokens_2 = tokenize(sentence2, stemmer)
+    tokens_1, original_1 = tokenize(sentence1, stemmer)
+    tokens_2, original_2 = tokenize(sentence2, stemmer)
 
     senses_1 = [wsd(sentence1+" "+context, token, wsd_) for token in tokens_1 if token and len(token) > 0]
     senses_2 = [wsd(sentence2+" "+context, token, wsd_) for token in tokens_2 if token and len(token) > 0]
@@ -143,11 +161,11 @@ def similarity(sentence1, sentence2, **kwargs):
 
         candidate['match'] = val
         candidate['word1'] = {
-            'token': tokens_1[row],
+            'token': original_1[row],
             'definition': senses_1[row].definition if hasattr(senses_1[row], 'definition') else None,
         }
         candidate['word2'] = {
-            'token': tokens_2[col],
+            'token': original_2[col],
             'definition': senses_2[col].definition if hasattr(senses_2[col], 'definition') else None,
         }
 
