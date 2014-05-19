@@ -1,0 +1,12 @@
+What is the difference between an artery and a vein?
+A vein has valves
+An artery has thicker walls
+A vein has thinner walls
+An artery does not have valves
+An artery flows away from the heart
+A vein flows into the heart
+----
+A vein has valves::True
+An artery has no veins::True
+An artery has valves::False
+A vein flows away from the heart::False

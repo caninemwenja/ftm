@@ -1,0 +1,8 @@
+State bernoulli's principle
+The faster a liquid or gas moves the less pressure it exerts
+Increase in a liquid's or gas's velocity leads to a decrease in it's pressure.
+----
+A liquid or gas exerts less pressure when it moves faster::True
+A liquid or gas exerts less pressure when it moves slower::False
+Decrease in a liquid's or gas's velocity leads to an increase in it's pressure::True
+Decrease in a liquid's or gas's velocity leads to an decrease in it's pressure::False

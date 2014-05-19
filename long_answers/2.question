@@ -1,0 +1,7 @@
+In carrier pigeons there is a rare inherited condition that causes the death of the chicks before hatching. In order for this disease to be passed from generation to generation there must be parent birds that
+heterozygous to disease
+----
+are heterozygous for the disease::True
+have the disease themselves::False
+produce new mutations for this disease::False
+are closely interbred::False

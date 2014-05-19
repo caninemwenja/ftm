@@ -1,0 +1,13 @@
+What is the function of Parliament?
+Parliament makes laws
+Parliament authorizes the national budget
+----
+Laws are made in Parliament::True
+Parliament makes laws::True
+Parliament makes national laws::True
+Parliament enacts laws::True
+Parliament signs off on the national budget::True
+Parliament does not make laws::False
+Parliament embezzles funds::False
+Parliament decides on taxes::False
+Parliament is an alien creature::False

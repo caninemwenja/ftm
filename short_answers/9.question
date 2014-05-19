@@ -1,0 +1,7 @@
+What is the likely impact of NOT understanding properly the context/environment of the project?
+The scope will be wrongly defined
+----
+The project will be late::False
+There will be an overspend::False
+The performance will be reduced::False
+The scope will be wrongly defined::True

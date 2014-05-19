@@ -1,0 +1,7 @@
+A healthy individual is a carrier of a lethal allele but is unaffected by it. What is the probable genotype of this individual?
+one recessive lethal allele and one dominant normal allele
+----
+two dominant normal alleles::False
+one recessive lethal allele and one dominant lethal allele::False
+one recessive lethal allele and one dominant normal allele::True
+one dominant lethal allele and one recessive normal allele::False
